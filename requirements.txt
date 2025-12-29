@@ -1,0 +1,40 @@
+# Core Dependencies
+fastapi==0.104.1
+uvicorn[standard]==0.24.0
+python-multipart==0.0.6
+
+# OCR
+pytesseract==0.3.10
+easyocr==1.7.1
+pdf2image==1.16.3
+opencv-python==4.8.1.78
+Pillow==10.1.0
+
+# Text Processing
+nltk==3.8.1
+regex==2023.10.3
+
+# NER & NLP
+spacy==3.7.2
+# Run: python -m spacy download en_core_web_sm
+
+# Transformers & ML
+transformers==4.35.2
+torch==2.1.1
+datasets==2.15.0
+
+# Database
+sqlalchemy==2.0.23
+
+# Utilities
+pydantic==2.5.2
+python-dotenv==1.0.0
+requests==2.31.0
+
+# Testing
+pytest==7.4.3
+pytest-asyncio==0.21.1
+
+# Development
+jupyter==1.0.0
+ipykernel==6.27.1

@@ -1,0 +1,62 @@
+{
+  "document_type": "RTC (Record of Rights, Tenancy and Crops)",
+  "form_number": null,
+  "village": null,
+  "taluk": null,
+  "district": null,
+  "hobli": null,
+  "survey_number": null,
+  "khata_number": null,
+  "owner_name": "Ramappa\nBin Futtirangashta",
+  "extent_acres": null,
+  "extent_guntas": null,
+  "land_classification": null,
+  "loan_details": [
+    {
+      "amount": "142005-2006",
+      "context": "ngashta\n[78/+}]\nrelationship son\n6/+/3\nRamappa\nTagarasatagarasapa:\n]\n2.34.00.00\n74/*/2\nof debts\nIHR 142005-2006 Ramappa to Manager SBM Paravara\n550.0U0L- Basis of Rs.Ramappa from Makanager SBM. Farava branch\nLin"
+    },
+    {
+      "amount": "2000001",
+      "context": "ager SBM Puravar Branch from Aadhaar Ramappa to Manager S B Aim Puravar Branch for Rs.\nBasis for Rs.2000001]\nRs 20UUDul- Price basis\nLingegowda Bin\nRampka\nabove\nrelationship son\nJoint\nRangadhamaya KR Bin Lay"
+    },
+    {
+      "amount": "142005-",
+      "context": "ngashta\n[78/+}]\nrelationship son\n6/+/3\nRamappa\nTagarasatagarasapa:\n]\n2.34.00.00\n74/*/2\nof debts\nIHR 142005-2006 Ramappa to Manager SBM Paravara\n550.0U0L- Basis of Rs.Ramappa from Makanager SBM. Farava branch"
+    }
+  ],
+  "mutation_details": [
+    {
+      "reference": "MR 14/2005-2006",
+      "type": "Mutation Record"
+    },
+    {
+      "reference": "MR 14/2005-2006",
+      "type": "Mutation Record"
+    },
+    {
+      "reference": "MR 14/2005-2006",
+      "type": "Mutation Record"
+    },
+    {
+      "reference": "MR 16/2010-2011",
+      "type": "Mutation Record"
+    },
+    {
+      "reference": "MR 14/2005-2006",
+      "type": "Mutation Record"
+    },
+    {
+      "reference": "MR 16/2010-2011",
+      "type": "Mutation Record"
+    },
+    {
+      "reference": "MR 14/2005-2006",
+      "type": "Mutation Record"
+    }
+  ],
+  "valid_from": null,
+  "valid_to": null,
+  "digitally_signed_date": null,
+  "print_page_no": null
+}

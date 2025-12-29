@@ -1,0 +1,125 @@
+{
+  "verification_status": "MAJOR_MISMATCH",
+  "match_score": 40,
+  "total_checks": 5,
+  "passed_checks": 2,
+  "failed_checks": 2,
+  "matches": [
+    {
+      "field": "Dates",
+      "match": true,
+      "warning": true,
+      "rtc_values": [
+        "28/11/2023",
+        "14/10/2025",
+        "11/28/2023"
+      ],
+      "mr_values": [],
+      "common_values": [],
+      "message": "⚠️ Insufficient date information"
+    },
+    {
+      "field": "Loan/Encumbrance",
+      "match": true,
+      "rtc_loan": true,
+      "mr_loan": true,
+      "rtc_banks": [
+        "State Bank of Mysore (now SBI)"
+      ],
+      "mr_banks": [
+        "State Bank of Mysore (now SBI)"
+      ],
+      "message": "✅ Both documents indicate loan present"
+    }
+  ],
+  "mismatches": [
+    {
+      "field": "Survey Numbers",
+      "match": false,
+      "rtc_values": [
+        "178/7"
+      ],
+      "mr_values": [],
+      "common_values": [],
+      "message": "❌ Survey number mismatch - RTC: ['178/7'], MR: []"
+    },
+    {
+      "field": "Owner Names",
+      "match": false,
+      "rtc_values": [
+        "Lingegowda Bin Lay Ramappa"
+      ],
+      "mr_values": [
+        "Ramappa\nBin Futtirangashta"
+      ],
+      "matched_pairs": [],
+      "similarity": 26.92,
+      "message": "❌ Owner name mismatch - RTC: ['Lingegowda Bin Lay Ramappa'], MR: ['Ramappa\\nBin Futtirangashta']"
+    }
+  ],
+  "warnings": [
+    {
+      "field": "Mutation Status",
+      "match": false,
+      "message": "⚠️ Mutation Register appears incomplete",
+      "details": "MR document may be missing critical information"
+    }
+  ],
+  "details": {
+    "survey_numbers": {
+      "field": "Survey Numbers",
+      "match": false,
+      "rtc_values": [
+        "178/7"
+      ],
+      "mr_values": [],
+      "common_values": [],
+      "message": "❌ Survey number mismatch - RTC: ['178/7'], MR: []"
+    },
+    "owner_names": {
+      "field": "Owner Names",
+      "match": false,
+      "rtc_values": [
+        "Lingegowda Bin Lay Ramappa"
+      ],
+      "mr_values": [
+        "Ramappa\nBin Futtirangashta"
+      ],
+      "matched_pairs": [],
+      "similarity": 26.92,
+      "message": "❌ Owner name mismatch - RTC: ['Lingegowda Bin Lay Ramappa'], MR: ['Ramappa\\nBin Futtirangashta']"
+    },
+    "dates": {
+      "field": "Dates",
+      "match": true,
+      "warning": true,
+      "rtc_values": [
+        "28/11/2023",
+        "14/10/2025",
+        "11/28/2023"
+      ],
+      "mr_values": [],
+      "common_values": [],
+      "message": "⚠️ Insufficient date information"
+    },
+    "mutation_status": {
+      "field": "Mutation Status",
+      "match": false,
+      "message": "⚠️ Mutation Register appears incomplete",
+      "details": "MR document may be missing critical information"
+    },
+    "loans": {
+      "field": "Loan/Encumbrance",
+      "match": true,
+      "rtc_loan": true,
+      "mr_loan": true,
+      "rtc_banks": [
+        "State Bank of Mysore (now SBI)"
+      ],
+      "mr_banks": [
+        "State Bank of Mysore (now SBI)"
+      ],
+      "message": "✅ Both documents indicate loan present"
+    }
+  }
+}

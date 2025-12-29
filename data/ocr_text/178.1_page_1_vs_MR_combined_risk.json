@@ -1,0 +1,24 @@
+{
+  "risk_score": 100,
+  "risk_level": "High",
+  "rtc_risk_score": 40,
+  "mr_risk_score": 60,
+  "cross_match_score": 40,
+  "verification_status": "MAJOR_MISMATCH",
+  "factors": [
+    "RTC Risk Score: 40/100",
+    "MR Risk Score: 60/100",
+    "Cross-Document Match: 40%",
+    "Failed 2 cross-document checks"
+  ],
+  "flags": [
+    "CROSS_DOC_MISMATCH",
+    "MISMATCH_SURVEY_NUMBERS",
+    "MISMATCH_OWNER_NAMES"
+  ],
+  "cross_verification_summary": {
+    "total_checks": 5,
+    "passed": 2,
+    "failed": 2
+  }
+}

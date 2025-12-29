@@ -1,0 +1,61 @@
+{
+  "input_file": "data\\ocr_text\\MR_ocr_cleaned.json",
+  "processed_at": "2025-12-29T10:33:14.219672",
+  "entities": {
+    "owner_names": [],
+    "survey_numbers": [],
+    "dates": [],
+    "banks": [
+      "State Bank of Mysore (now SBI)"
+    ],
+    "loan_indicators": [],
+    "case_numbers": [],
+    "extents": [],
+    "locations": {
+      "village": null,
+      "taluk": null,
+      "district": null
+    },
+    "raw_persons": [
+      "Bin Lay",
+      "debts\\nIHR 142005-2006",
+      "Purava Shakha",
+      "Paravara Shakh",
+      "Puravar Branch",
+      "Purava Branch Rs",
+      "0UOI Aadhaar",
+      "Purava Branch 550",
+      "Aadhar Ramappa"
+    ],
+    "raw_organizations": [
+      "change\\ndate\\n07/07/2022\\nHoban\\nPuravara\\nMR NO\\nH3\\nMode",
+      "SBM",
+      "Farava",
+      "0DU Ramappa",
+      "Aadhaar Ramappa",
+      "SB",
+      "Furava",
+      "Muhtation Order\\n6-08-2022\\nRoya1"
+    ],
+    "raw_locations": [
+      "Acres",
+      "Sarva"
+    ],
+    "loan_amounts": [
+      "20",
+      "550",
+      "2000001",
+      "142005-2006"
+    ],
+    "loan_present": true
+  },
+  "summary": {
+    "survey_numbers_found": 0,
+    "dates_found": 0,
+    "banks_found": 1,
+    "loan_present": true,
+    "case_numbers_found": 0,
+    "persons_found": 9,
+    "organizations_found": 8
+  }
+}

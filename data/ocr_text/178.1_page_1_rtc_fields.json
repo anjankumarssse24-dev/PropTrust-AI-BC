@@ -1,0 +1,31 @@
+{
+  "document_type": "RTC (Record of Rights, Tenancy and Crops)",
+  "form_number": null,
+  "village": null,
+  "taluk": null,
+  "district": null,
+  "hobli": null,
+  "survey_number": "178",
+  "hissa_number": "1",
+  "khata_number": null,
+  "owner_name": "Lingegowda Bin Lay Ramappa",
+  "extent_acres": "1",
+  "extent_guntas": "17",
+  "land_classification": null,
+  "loan_details": [
+    {
+      "amount": "200000/-",
+      "context": "Irrigation name No. 'Kr, s. source Monsoon the swans grew Total Manager State Bank of Mysore Red Puravara branch Rs 200000/- to Adar 6 Govt 12. Moving Hajagade@র্দেগগাগা \"_9]g@ O[[yauo ' Uses and crops 0] BCC1OMI year Name o"
+    }
+  ],
+  "mutation_details": [
+    {
+      "reference": "MR 16/2010-2011",
+      "type": "Mutation Record"
+    }
+  ],
+  "valid_from": "28/11/2023",
+  "valid_to": "Till Date",
+  "digitally_signed_date": "11/28/2023",
+  "print_page_no": null
+}

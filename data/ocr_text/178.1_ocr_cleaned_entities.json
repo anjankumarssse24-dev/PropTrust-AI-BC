@@ -1,0 +1,39 @@
+{
+  "input_file": "data\\ocr_text\\178.1_ocr_cleaned.json",
+  "processed_at": "2025-12-29T11:32:34.461594",
+  "entities": {
+    "owner_names": [],
+    "survey_numbers": [
+      "178",
+      "178*1"
+    ],
+    "dates": [],
+    "banks": [
+      "State Bank of Mysore (now SBI)"
+    ],
+    "loan_indicators": [],
+    "case_numbers": [],
+    "extents": [],
+    "locations": {
+      "village": null,
+      "taluk": null,
+      "district": null
+    },
+    "raw_persons": [],
+    "raw_organizations": [],
+    "raw_locations": [],
+    "loan_amounts": [
+      "200000/-"
+    ],
+    "loan_present": true
+  },
+  "summary": {
+    "survey_numbers_found": 2,
+    "dates_found": 0,
+    "banks_found": 1,
+    "loan_present": true,
+    "case_numbers_found": 0,
+    "persons_found": 0,
+    "organizations_found": 0
+  }
+}

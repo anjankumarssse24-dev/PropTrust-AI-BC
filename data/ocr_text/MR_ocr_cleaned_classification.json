@@ -1,0 +1,34 @@
+{
+  "input_file": "data\\ocr_text\\MR_ocr_cleaned_entities.json",
+  "classified_at": "2025-12-29T10:33:14.245144",
+  "classification": {
+    "label": "Loan Detected",
+    "confidence": 0.85,
+    "all_labels": {
+      "Loan Detected": 1.0,
+      "Clear Title": 0.0,
+      "Pending Mutation": 0.0,
+      "Court Case Mentioned": 0.0,
+      "Forgery Suspected": 0.0,
+      "Multiple Issues": 0.0,
+      "Incomplete Document": 0.0
+    },
+    "reasoning": "Loan detected - Banks: State Bank of Mysore (now SBI); Loan amounts: 20, 550, 2000001, 142005-2006 | Moderate confidence: Limited survey number data",
+    "issues_detected": {
+      "loan_present": true,
+      "court_case": false,
+      "survey_numbers_present": false,
+      "dates_present": false
+    }
+  },
+  "entity_summary": {
+    "survey_numbers_found": 0,
+    "dates_found": 0,
+    "banks_found": 1,
+    "loan_present": true,
+    "case_numbers_found": 0,
+    "persons_found": 9,
+    "organizations_found": 8
+  },
+  "recommendation": "⚠️ CAUTION - Encumbrance/loan detected. Obtain No Objection Certificate (NOC) from bank before proceeding."
+}
