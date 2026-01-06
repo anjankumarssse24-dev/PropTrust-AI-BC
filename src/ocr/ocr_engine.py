@@ -198,14 +198,50 @@ class OCREngine:
     
     def extract_text(self, image_path: str) -> str:
         """
-        Extract text from image file using OCR
+        Extract text from image or PDF file using OCR
         
         Args:
-            image_path: Path to image file
+            image_path: Path to image or PDF file
             
         Returns:
             str: Extracted text
         """
+        file_path = Path(image_path)
+        
+        # Handle PDF files
+        if file_path.suffix.lower() == '.pdf':
+            # Convert PDF to images temporarily
+            temp_dir = file_path.parent / "temp_images"
+            temp_dir.mkdir(exist_ok=True)
+            
+            try:
+                image_paths = self.pdf_to_images(str(file_path), str(temp_dir))
+                
+                # Extract text from all pages
+                all_text = []
+                for img_path in image_paths:
+                    image = cv2.imread(img_path)
+                    if image is not None:
+                        enhanced = self.enhance_image(image)
+                        text = self.extract_text_from_array(enhanced)
+                        all_text.append(text)
+                
+                # Clean up temp files
+                import shutil
+                shutil.rmtree(temp_dir, ignore_errors=True)
+                
+                return "\n\n".join(all_text)
+            except Exception as e:
+                print(f"❌ PDF processing error: {e}")
+                # Clean up on error
+                import shutil
+                shutil.rmtree(temp_dir, ignore_errors=True)
+                raise
+        
+        # Handle image files
         image = cv2.imread(image_path)
+        if image is None:
+            raise ValueError(f"Cannot read image file: {image_path}")
+        
         enhanced = self.enhance_image(image)
         return self.extract_text_from_array(enhanced)

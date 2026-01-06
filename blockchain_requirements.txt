@@ -1,0 +1,22 @@
+# Blockchain Dependencies for PropTrust
+# Add these to your requirements.txt
+
+# Web3 & Ethereum
+web3==6.11.3
+eth-account==0.10.0
+eth-utils==2.3.1
+py-solc-x==2.0.2
+
+# Database
+sqlalchemy==2.0.23
+psycopg2-binary==2.9.9  # PostgreSQL driver
+alembic==1.13.1  # Database migrations
+
+# Additional utilities
+python-jose[cryptography]==3.3.0  # JWT tokens (optional)
+passlib[bcrypt]==1.7.4  # Password hashing (optional)
+celery==5.3.4  # Background tasks (optional)
+redis==5.0.1  # For Celery (optional)
+
+# Environment management
+python-dotenv==1.0.0

@@ -63,10 +63,11 @@ class NERExtractor:
                 r'Sno[:\s]*(\d+[/\-]?\d*)',
             ],
             'owner_name': [
-                r'(?:Owner|Holder|Name)[:\s]+([A-Z][a-z]+(?:\s+[A-Z][a-z]+){0,3})',
-                r'Name[:\s]+([A-Z][a-z]+(?:\s+[A-Z][a-z]+)*)',
-                r'Cultivator[:\s]+([A-Z][a-z]+(?:\s+[A-Z][a-z]+)*)',
-                r'Pattadar[:\s]+([A-Z][a-z]+(?:\s+[A-Z][a-z]+)*)',
+                r'(?:Owner|Holder|Name)[:\s]+([A-Z][a-z]+(?:\s+(?:Bin|S/o|D/o|W/o)\s+)?(?:[A-Z][a-z]+\s*){1,4})',
+                r'Name[:\s]+([A-Z][a-z]+(?:\s+(?:Bin|S/o|D/o|W/o|Bin)\s+)?(?:[A-Z][a-z]+\s*){1,4})',
+                r'Cultivator[:\s]+([A-Z][a-z]+(?:\s+(?:Bin|S/o|D/o)\s+)?(?:[A-Z][a-z]+\s*){1,4})',
+                r'Pattadar[:\s]+([A-Z][a-z]+(?:\s+(?:Bin|S/o|D/o)\s+)?(?:[A-Z][a-z]+\s*){1,4})',
+                r'\b([A-Z][a-z]+\s+Bin\s+[A-Z][a-z]+(?:\s+[A-Z][a-z]+)*)\b',  # Indian name pattern with Bin
             ],
             'khata_no': [
                 r'Khata\s*(?:No|Number)\.?\s*[:\-]?\s*(\d+)',
@@ -210,6 +211,20 @@ class NERExtractor:
             len(loan_amounts) > 0
         )
         
+        # Extract owner names - try patterns first, then use spaCy NER as fallback
+        owner_pattern_matches = self._extract_pattern(text, 'owner_name')
+        if owner_pattern_matches:
+            entities["owner_names"] = owner_pattern_matches
+        elif entities["raw_persons"]:
+            # Use persons detected by spaCy, filtering out likely false positives
+            entities["owner_names"] = [
+                person for person in entities["raw_persons"]
+                if len(person.split()) >= 2 and len(person) >= 5  # At least 2 words, 5 chars
+            ]
+        
+        # Add backward compatibility - set 'persons' field
+        entities["persons"] = entities["owner_names"]
+        
         # Clean and deduplicate
         entities = self._clean_entities(entities)
         
@@ -240,22 +255,35 @@ class NERExtractor:
         return results
     
     def _validate_survey_numbers(self, survey_candidates: List[str], date_candidates: List[str]) -> List[str]:
-        """Validate survey numbers against land-record formats (PROMPT 1)"""
+        """Validate survey numbers against land-record formats - STRICT validation"""
         valid_surveys = []
         
         for sn in survey_candidates:
-            # Reject if it looks like a date (DD/MM or MM/DD format)
+            # CRITICAL FIX: Reject date-like patterns more strictly
+            # Pattern 1: Leading zeros suggest dates (0028/11 = 28/11 date)
+            if re.match(r'^0+\d{1,2}/\d{1,2}$', sn):
+                continue  # Reject: likely date with leading zero
+            
+            # Pattern 2: Both parts <= 31 (day/month range)
             if re.match(r'^\d{1,2}/\d{1,2}$', sn):
                 parts = sn.split('/')
                 if len(parts) == 2:
                     n1, n2 = int(parts[0]), int(parts[1])
-                    # If both <= 12 or one > 12 (day), likely a date
-                    if (n1 <= 12 and n2 <= 12) or n1 > 12 or n2 > 12:
-                        continue
+                    # If both <= 31, likely a date (DD/MM)
+                    if n1 <= 31 and n2 <= 31:
+                        continue  # Reject: date pattern
             
-            # Valid: 178/1, 45/2A, 123-4B, 16/3
-            if re.match(r'^\d{1,4}[/\-]\d{1,3}[A-Za-z]?$', sn) or re.match(r'^\d{1,5}$', sn):
-                if len(sn) <= 20:
+            # STRICT VALIDATION: Valid survey formats only
+            # Format 1: Pure number (178, 45, 923)
+            # Format 2: Survey/Hissa (178/1, 45/2A)
+            if re.match(r'^\d{1,5}$', sn):  # Pure number (no slash)
+                if int(sn) > 0 and len(sn) <= 5:
+                    valid_surveys.append(sn)
+            elif re.match(r'^\d{1,4}[/\-]\d{1,3}[A-Za-z]?$', sn):  # Survey/Hissa
+                parts = sn.split('/' if '/' in sn else '-')
+                survey_part = int(parts[0])
+                # Survey number should be reasonable (not a date)
+                if survey_part > 31 or (survey_part <= 31 and len(parts[1]) > 2):  # Hissa > 2 digits unlikely for date
                     valid_surveys.append(sn)
         
         return list(dict.fromkeys(valid_surveys))

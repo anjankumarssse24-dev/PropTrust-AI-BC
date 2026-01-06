@@ -1,0 +1,839 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PropTrust - AI Property Verification System</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="/static/css/styles.css">
+</head>
+<body>
+    <!-- Top Navigation Bar -->
+    <nav class="navbar navbar-expand-lg navbar-dark sticky-top shadow-sm" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+        <div class="container-fluid px-4">
+            <a class="navbar-brand fw-bold fs-4" href="#" onclick="showPage('dashboard')" style="cursor: pointer;">
+                <i class="fas fa-shield-alt"></i> PropTrust
+                <span class="badge bg-light text-primary ms-2" style="font-size: 0.6rem;">v2.0</span>
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto fs-5">
+                    <li class="nav-item mx-2">
+                        <a class="nav-link active px-3 py-2" href="#" onclick="showPage('dashboard'); return false;" id="nav-dashboard">
+                            <i class="fas fa-home"></i> Dashboard
+                        </a>
+                    </li>
+                    <li class="nav-item mx-2">
+                        <a class="nav-link px-3 py-2" href="#" onclick="showPage('verify'); return false;" id="nav-verify">
+                            <i class="fas fa-file-upload"></i> Verify Document
+                        </a>
+                    </li>
+                    <li class="nav-item mx-2">
+                        <a class="nav-link px-3 py-2" href="#" onclick="showPage('blockchain'); return false;" id="nav-blockchain">
+                            <i class="fas fa-cube"></i> Blockchain
+                        </a>
+                    </li>
+                    <li class="nav-item mx-2">
+                        <a class="nav-link px-3 py-2" href="#" onclick="showPage('history'); return false;" id="nav-history">
+                            <i class="fas fa-history"></i> Verification History
+                        </a>
+                    </li>
+                    <li class="nav-item mx-2">
+                        <a class="nav-link px-3 py-2" href="#" onclick="showPage('settings'); return false;" id="nav-settings">
+                            <i class="fas fa-cog"></i> Settings
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Container -->
+    <div class="container-fluid main-container px-4 py-4">
+        
+        <!-- PAGE 1: DASHBOARD -->
+        <div id="page-dashboard" class="page-content">
+            <!-- Hero Section -->
+            <div class="hero-card mb-4 p-5">
+                <div class="row align-items-center">
+                    <div class="col-md-8">
+                        <h1 class="display-4 fw-bold text-white mb-3">
+                            <i class="fas fa-shield-alt"></i> PropTrust Verification System
+                        </h1>
+                        <p class="lead text-white-50 mb-4">
+                            AI-powered property document verification with blockchain-backed immutability
+                        </p>
+                        <button class="btn btn-light btn-lg shadow" onclick="showPage('verify')">
+                            <i class="fas fa-file-upload"></i> Start Verification
+                        </button>
+                    </div>
+                    <div class="col-md-4 text-center">
+                        <i class="fas fa-building fa-8x text-white opacity-25"></i>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Statistics Cards -->
+            <div class="row g-4 mb-4">
+                <div class="col-md-3">
+                    <div class="stat-card shadow-sm">
+                        <div class="stat-icon bg-primary">
+                            <i class="fas fa-file-alt"></i>
+                        </div>
+                        <div class="stat-content">
+                            <h3 class="mb-0 fw-bold" id="total-verifications">0</h3>
+                            <p class="text-muted mb-0 small">Total Verifications</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="stat-card shadow-sm">
+                        <div class="stat-icon bg-success">
+                            <i class="fas fa-check-circle"></i>
+                        </div>
+                        <div class="stat-content">
+                            <h3 class="mb-0 fw-bold" id="low-risk-count">0</h3>
+                            <p class="text-muted mb-0 small">Low Risk</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="stat-card shadow-sm">
+                        <div class="stat-icon bg-warning">
+                            <i class="fas fa-exclamation-triangle"></i>
+                        </div>
+                        <div class="stat-content">
+                            <h3 class="mb-0 fw-bold" id="medium-risk-count">0</h3>
+                            <p class="text-muted mb-0 small">Medium Risk</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="stat-card shadow-sm">
+                        <div class="stat-icon bg-info">
+                            <i class="fas fa-cube"></i>
+                        </div>
+                        <div class="stat-content">
+                            <h3 class="mb-0 fw-bold" id="blockchain-count">0</h3>
+                            <p class="text-muted mb-0 small">Blockchain Anchored</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Recent Verifications -->
+            <div class="card shadow-sm">
+                <div class="card-header bg-white border-bottom">
+                    <h5 class="mb-0"><i class="fas fa-clock"></i> Recent Verifications</h5>
+                </div>
+                <div class="card-body p-0">
+                    <div class="table-responsive">
+                        <table class="table table-hover mb-0">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>Property ID</th>
+                                    <th>Owner</th>
+                                    <th>Risk Level</th>
+                                    <th>Blockchain</th>
+                                    <th>Date</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="recent-verifications-table">
+                                <tr>
+                                    <td colspan="6" class="text-center text-muted py-5">
+                                        <i class="fas fa-inbox fa-3x mb-3 d-block"></i>
+                                        No verifications yet. <a href="#" onclick="showPage('verify')" class="text-decoration-none">Start your first verification</a>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- PAGE 2: VERIFY DOCUMENT -->
+        <div id="page-verify" class="page-content" style="display: none;">
+            <div class="row">
+                <div class="col-lg-8 mx-auto">
+                    <div class="card shadow-sm">
+                        <div class="card-header bg-primary text-white">
+                            <h4 class="mb-0"><i class="fas fa-file-upload"></i> Upload Property Document for Verification</h4>
+                        </div>
+                        <div class="card-body p-4">
+                            <form id="uploadForm">
+                                <div class="mb-4">
+                                    <label class="form-label fw-bold">Document Type</label>
+                                    <div class="row g-3">
+                                        <div class="col-md-6">
+                                            <div class="doc-type-card active" onclick="selectDocType('RTC', this)">
+                                                <i class="fas fa-file-alt fa-3x mb-3 text-primary"></i>
+                                                <h6 class="fw-bold">RTC Document</h6>
+                                                <p class="small text-muted mb-0">Record of Rights, Tenancy & Crops</p>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="doc-type-card disabled" title="Coming Soon">
+                                                <i class="fas fa-file-invoice fa-3x mb-3 text-secondary"></i>
+                                                <h6 class="fw-bold text-muted">EC Document</h6>
+                                                <p class="small text-muted mb-2">Encumbrance Certificate</p>
+                                                <span class="badge bg-secondary">Coming Soon</span>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="doc-type-card disabled" title="Coming Soon">
+                                                <i class="fas fa-exchange-alt fa-3x mb-3 text-secondary"></i>
+                                                <h6 class="fw-bold text-muted">MR Document</h6>
+                                                <p class="small text-muted mb-2">Mutation Register</p>
+                                                <span class="badge bg-secondary">Coming Soon</span>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="doc-type-card disabled" title="Coming Soon">
+                                                <i class="fas fa-handshake fa-3x mb-3 text-secondary"></i>
+                                                <h6 class="fw-bold text-muted">Sale Deed</h6>
+                                                <p class="small text-muted mb-2">Property Sale Agreement</p>
+                                                <span class="badge bg-secondary">Coming Soon</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <input type="hidden" id="documentType" value="RTC">
+                                </div>
+
+                                <div class="mb-4">
+                                    <label for="fileInput" class="form-label fw-bold">Select Document File</label>
+                                    <div class="upload-area text-center p-5" id="uploadArea">
+                                        <i class="fas fa-cloud-upload-alt fa-4x text-primary mb-3"></i>
+                                        <h5>Drag & Drop or Click to Upload</h5>
+                                        <p class="text-muted">Supported: JPG, PNG, PDF (Max 10MB)</p>
+                                        <input type="file" class="form-control d-none" id="fileInput" accept="image/*,application/pdf" required>
+                                        <button type="button" class="btn btn-outline-primary mt-2" onclick="document.getElementById('fileInput').click()">
+                                            <i class="fas fa-folder-open"></i> Browse Files
+                                        </button>
+                                    </div>
+                                    <div id="filePreview" class="mt-3" style="display: none;">
+                                        <div class="alert alert-info d-flex align-items-center">
+                                            <i class="fas fa-file fa-2x me-3"></i>
+                                            <div class="flex-grow-1">
+                                                <strong id="fileName"></strong>
+                                                <small class="d-block text-muted" id="fileSize"></small>
+                                            </div>
+                                            <button type="button" class="btn-close" onclick="clearFile()"></button>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="mb-4">
+                                    <div class="card bg-light border-0">
+                                        <div class="card-body">
+                                            <div class="form-check form-switch">
+                                                <input class="form-check-input" type="checkbox" id="blockchainCheck" checked>
+                                                <label class="form-check-label" for="blockchainCheck">
+                                                    <strong><i class="fas fa-cube text-primary"></i> Store verification on blockchain</strong>
+                                                    <br><small class="text-muted">Recommended for immutable audit trail and tamper detection</small>
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="d-grid">
+                                    <button type="submit" class="btn btn-primary btn-lg">
+                                        <i class="fas fa-check-circle"></i> Verify Document with AI
+                                    </button>
+                                </div>
+                            </form>
+
+                            <!-- Progress Section -->
+                            <div id="progressSection" class="mt-4" style="display: none;">
+                                <div class="progress" style="height: 30px;">
+                                    <div id="progressBar" class="progress-bar progress-bar-striped progress-bar-animated fw-bold" 
+                                         role="progressbar" style="width: 0%">0%</div>
+                                </div>
+                                <p id="progressText" class="text-center mt-3 fw-bold text-primary"></p>
+                                <div class="text-center">
+                                    <div class="spinner-border text-primary" role="status">
+                                        <span class="visually-hidden">Processing...</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- PAGE 3: VERIFICATION RESULTS -->
+        <div id="page-results" class="page-content" style="display: none;">
+            <div class="row">
+                <div class="col-lg-10 mx-auto">
+                    <div class="alert alert-success alert-dismissible fade show" role="alert">
+                        <i class="fas fa-check-circle fa-lg me-2"></i>
+                        <strong>AI Verification Complete!</strong> Review the results below and decide whether to store on blockchain.
+                        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                    </div>
+
+                    <!-- Tabs -->
+                    <ul class="nav nav-tabs nav-fill mb-4" id="resultsTabs" role="tablist">
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link active" id="overview-tab" data-bs-toggle="tab" data-bs-target="#overview" type="button">
+                                <i class="fas fa-eye"></i> Overview
+                            </button>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link" id="risk-tab" data-bs-toggle="tab" data-bs-target="#risk" type="button">
+                                <i class="fas fa-exclamation-triangle"></i> Risk Analysis
+                            </button>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link" id="fields-tab" data-bs-toggle="tab" data-bs-target="#fields" type="button">
+                                <i class="fas fa-list"></i> RTC Fields
+                            </button>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link" id="ocr-tab" data-bs-toggle="tab" data-bs-target="#ocr" type="button">
+                                <i class="fas fa-file-alt"></i> OCR Preview
+                            </button>
+                        </li>
+                    </ul>
+
+                    <div class="tab-content" id="resultsTabContent">
+                        <!-- Overview Tab -->
+                        <div class="tab-pane fade show active" id="overview" role="tabpanel">
+                            <div class="card shadow-sm mb-4">
+                                <div class="card-header bg-white border-bottom">
+                                    <h4 class="mb-0"><i class="fas fa-info-circle text-primary"></i> Property Overview</h4>
+                                </div>
+                                <div class="card-body">
+                                    <div class="row g-3 mb-4">
+                                        <div class="col-md-3">
+                                            <div class="metric-box">
+                                                <p class="text-muted small mb-1">Property ID</p>
+                                                <h6 id="result-propertyId" class="fw-bold text-primary">-</h6>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <div class="metric-box">
+                                                <p class="text-muted small mb-1">Owner Name</p>
+                                                <h6 id="result-ownerName" class="fw-bold">-</h6>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <div class="metric-box">
+                                                <p class="text-muted small mb-1">Survey Number</p>
+                                                <h6 id="result-surveyNumber" class="fw-bold">-</h6>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <div class="metric-box">
+                                                <p class="text-muted small mb-1">Village</p>
+                                                <h6 id="result-village" class="fw-bold">-</h6>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Additional RTC Information -->
+                                    <div class="row g-3 mb-4">
+                                        <div class="col-md-3">
+                                            <div class="metric-box">
+                                                <p class="text-muted small mb-1">Land Extent</p>
+                                                <h6 id="result-landExtent" class="fw-bold text-success">-</h6>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <div class="metric-box">
+                                                <p class="text-muted small mb-1">Valid From</p>
+                                                <h6 id="result-validFrom" class="fw-bold">-</h6>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <div class="metric-box">
+                                                <p class="text-muted small mb-1">Valid To</p>
+                                                <h6 id="result-validTo" class="fw-bold">-</h6>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <div class="metric-box">
+                                                <p class="text-muted small mb-1">Digitally Signed</p>
+                                                <h6 id="result-signedDate" class="fw-bold">-</h6>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Risk Score Gauge -->
+                                    <div class="row">
+                                        <div class="col-md-6 mx-auto text-center">
+                                            <div class="risk-gauge-wrapper p-4 bg-light rounded">
+                                                <h5 class="mb-3">Risk Assessment Score</h5>
+                                                <div class="risk-gauge-container">
+                                                    <canvas id="riskGauge" width="300" height="150"></canvas>
+                                                </div>
+                                                <h2 class="mt-3 mb-2">
+                                                    <span id="result-riskScore" class="fw-bold text-primary">-</span><span class="text-muted">/100</span>
+                                                </h2>
+                                                <h4>
+                                                    <span id="result-riskLevel" class="badge">-</span>
+                                                </h4>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Key Information -->
+                                    <div class="row mt-4 g-3">
+                                        <div class="col-md-6">
+                                            <div class="info-box p-3 border rounded">
+                                                <i class="fas fa-money-bill-wave text-warning fa-2x mb-2"></i>
+                                                <div>
+                                                    <p class="mb-1 text-muted small">Loan Detected</p>
+                                                    <h6 id="result-loanDetected" class="mb-0 fw-bold">-</h6>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="info-box p-3 border rounded">
+                                                <i class="fas fa-gavel text-danger fa-2x mb-2"></i>
+                                                <div>
+                                                    <p class="mb-1 text-muted small">Legal Case</p>
+                                                    <h6 id="result-legalCase" class="mb-0 fw-bold">-</h6>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Action Buttons -->
+                            <div class="card shadow-sm border-primary">
+                                <div class="card-body text-center p-4">
+                                    <h5 class="mb-3"><i class="fas fa-cube"></i> Next Step: Blockchain Anchoring</h5>
+                                    <p class="text-muted mb-4">Store this verification on the blockchain to create an immutable, tamper-proof record.</p>
+                                    <button class="btn btn-primary btn-lg me-2" onclick="storeToBlockchain()" id="storeBlockchainBtn">
+                                        <i class="fas fa-cube"></i> Store Verification on Blockchain
+                                    </button>
+                                    <button class="btn btn-outline-secondary btn-lg me-2" onclick="downloadReport()">
+                                        <i class="fas fa-download"></i> Download Report
+                                    </button>
+                                    <button class="btn btn-outline-primary btn-lg" onclick="showPage('verify')">
+                                        <i class="fas fa-redo"></i> Verify Another
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Risk Analysis Tab -->
+                        <div class="tab-pane fade" id="risk" role="tabpanel">
+                            <div class="card shadow-sm mb-4">
+                                <div class="card-header bg-warning text-dark">
+                                    <h4 class="mb-0"><i class="fas fa-exclamation-triangle"></i> Risk Factors Identified</h4>
+                                </div>
+                                <div class="card-body">
+                                    <ul id="riskFactorsList" class="list-group list-group-flush">
+                                        <li class="list-group-item">No risk factors detected</li>
+                                    </ul>
+                                </div>
+                            </div>
+
+                            <div class="card shadow-sm mb-4">
+                                <div class="card-header bg-danger text-white">
+                                    <h4 class="mb-0"><i class="fas fa-chart-bar"></i> Risk Breakdown</h4>
+                                </div>
+                                <div class="card-body">
+                                    <div id="riskBreakdownContainer" class="row g-3">
+                                        <!-- Will be populated by JavaScript -->
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="card shadow-sm">
+                                <div class="card-header bg-info text-white">
+                                    <h4 class="mb-0"><i class="fas fa-lightbulb"></i> Recommendations</h4>
+                                </div>
+                                <div class="card-body">
+                                    <ul id="recommendationsList" class="list-group list-group-flush">
+                                        <li class="list-group-item">No specific recommendations</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- RTC Fields Tab -->
+                        <div class="tab-pane fade" id="fields" role="tabpanel">
+                            <div class="card shadow-sm">
+                                <div class="card-header bg-primary text-white">
+                                    <h4 class="mb-0"><i class="fas fa-list"></i> Extracted RTC Fields</h4>
+                                </div>
+                                <div class="card-body">
+                                    <div class="table-responsive">
+                                        <table class="table table-bordered table-striped" id="rtcFieldsTable">
+                                            <tbody>
+                                                <tr><td colspan="2" class="text-center">Loading fields...</td></tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- OCR Preview Tab -->
+                        <div class="tab-pane fade" id="ocr" role="tabpanel">
+                            <div class="card shadow-sm">
+                                <div class="card-header bg-secondary text-white">
+                                    <h4 class="mb-0"><i class="fas fa-file-alt"></i> OCR Text Preview</h4>
+                                </div>
+                                <div class="card-body">
+                                    <div class="alert alert-info">
+                                        <i class="fas fa-info-circle"></i> This is the cleaned and processed text extracted from the document using OCR
+                                    </div>
+                                    <div class="ocr-preview p-3 bg-light border rounded" id="ocrTextPreview">
+                                        <p class="text-muted">Loading OCR text...</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- PAGE 4: BLOCKCHAIN VERIFICATION -->
+        <div id="page-blockchain" class="page-content" style="display: none;">
+            <div class="row">
+                <div class="col-lg-8 mx-auto">
+                    <div id="blockchain-not-stored" class="text-center py-5">
+                        <i class="fas fa-cube fa-5x text-muted mb-4"></i>
+                        <h3 class="mb-3">No Blockchain Record</h3>
+                        <p class="text-muted mb-4">Complete a verification first, then store it on blockchain for immutable proof.</p>
+                        <button class="btn btn-primary btn-lg" onclick="showPage('verify')">
+                            <i class="fas fa-file-upload"></i> Start Verification
+                        </button>
+                    </div>
+
+                    <div id="blockchain-stored" style="display: none;">
+                        <div class="card shadow-sm mb-4">
+                            <div class="card-header bg-info text-white">
+                                <h4 class="mb-0"><i class="fas fa-cube"></i> Blockchain Anchoring Status</h4>
+                            </div>
+                            <div class="card-body">
+                                <div class="alert alert-success mb-4">
+                                    <i class="fas fa-check-circle fa-2x float-start me-3"></i>
+                                    <h5 class="mb-1">✓ Successfully Anchored</h5>
+                                    <p class="mb-0">This verification has been stored on the blockchain and is now immutable.</p>
+                                </div>
+
+                                <div class="blockchain-info">
+                                    <div class="info-row">
+                                        <span class="info-label"><i class="fas fa-fingerprint"></i> Document Hash</span>
+                                        <span class="info-value font-monospace small" id="bc-hash">-</span>
+                                    </div>
+                                    <div class="info-row">
+                                        <span class="info-label"><i class="fas fa-link"></i> Transaction Hash</span>
+                                        <span class="info-value font-monospace small" id="bc-txHash">-</span>
+                                    </div>
+                                    <div class="info-row">
+                                        <span class="info-label"><i class="fas fa-cubes"></i> Block Number</span>
+                                        <span class="info-value fw-bold" id="bc-blockNumber">-</span>
+                                    </div>
+                                    <div class="info-row">
+                                        <span class="info-label"><i class="fas fa-network-wired"></i> Network</span>
+                                        <span class="info-value" id="bc-network">Ethereum (Local)</span>
+                                    </div>
+                                    <div class="info-row">
+                                        <span class="info-label"><i class="fas fa-clock"></i> Timestamp</span>
+                                        <span class="info-value" id="bc-timestamp">-</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="card shadow-sm mb-4">
+                            <div class="card-header bg-primary text-white">
+                                <h4 class="mb-0"><i class="fas fa-shield-alt"></i> Proof of Integrity</h4>
+                            </div>
+                            <div class="card-body">
+                                <div class="alert alert-light border">
+                                    <h6 class="fw-bold mb-3"><i class="fas fa-question-circle"></i> What does this mean?</h6>
+                                    <p class="mb-2">
+                                        <i class="fas fa-lock text-success"></i> 
+                                        <strong>Immutable Record:</strong> The verification data has been cryptographically hashed and stored on the blockchain.
+                                    </p>
+                                    <p class="mb-2">
+                                        <i class="fas fa-shield-alt text-primary"></i> 
+                                        <strong>Tamper Detection:</strong> Any modification to the original document will result in a different hash.
+                                    </p>
+                                    <p class="mb-0">
+                                        <i class="fas fa-infinity text-info"></i> 
+                                        <strong>Permanent:</strong> This record cannot be altered or deleted by anyone.
+                                    </p>
+                                </div>
+
+                                <div class="text-center mt-4">
+                                    <button class="btn btn-warning btn-lg" onclick="showTamperCheck()">
+                                        <i class="fas fa-search"></i> Verify Document Integrity
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Tamper Check Section -->
+                        <div id="tamperCheckSection" class="card shadow-sm" style="display: none;">
+                            <div class="card-header bg-danger text-white">
+                                <h4 class="mb-0"><i class="fas fa-shield-alt"></i> Tamper Detection</h4>
+                            </div>
+                            <div class="card-body">
+                                <p class="mb-4">Upload the document again to check if it has been tampered with since the original verification.</p>
+                                <form id="tamperCheckForm">
+                                    <input type="hidden" id="tamperPropertyId">
+                                    <div class="mb-3">
+                                        <label for="tamperFileInput" class="form-label fw-bold">Select Document to Verify</label>
+                                        <input type="file" class="form-control" id="tamperFileInput" accept="image/*,application/pdf" required>
+                                    </div>
+                                    <div class="d-grid gap-2">
+                                        <button type="submit" class="btn btn-danger btn-lg">
+                                            <i class="fas fa-search"></i> Check for Tampering
+                                        </button>
+                                        <button type="button" class="btn btn-secondary" onclick="hideTamperCheck()">
+                                            Cancel
+                                        </button>
+                                    </div>
+                                </form>
+
+                                <div id="tamperResults" class="mt-4" style="display: none;">
+                                    <!-- Populated dynamically -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- PAGE 5: VERIFICATION HISTORY -->
+        <div id="page-history" class="page-content" style="display: none;">
+            <div class="card shadow-sm">
+                <div class="card-header bg-primary text-white">
+                    <h4 class="mb-0"><i class="fas fa-history"></i> Verification History</h4>
+                </div>
+                <div class="card-body p-0">
+                    <div class="table-responsive">
+                        <table class="table table-hover mb-0">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>Property ID</th>
+                                    <th>Owner</th>
+                                    <th>Survey No.</th>
+                                    <th>Risk Level</th>
+                                    <th>Blockchain</th>
+                                    <th>Timestamp</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="historyTableBody">
+                                <tr>
+                                    <td colspan="7" class="text-center text-muted py-5">
+                                        <i class="fas fa-inbox fa-3x mb-3 d-block"></i>
+                                        <p class="mb-3">No verification history yet</p>
+                                        <button class="btn btn-primary" onclick="showPage('verify')">
+                                            <i class="fas fa-plus"></i> Start Your First Verification
+                                        </button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- PAGE 6: SETTINGS -->
+        <div id="page-settings" class="page-content" style="display: none;">
+            <h2 class="mb-4"><i class="fas fa-cog"></i> Settings</h2>
+            
+            <div class="row">
+                <!-- General Settings -->
+                <div class="col-lg-6 mb-4">
+                    <div class="card shadow-sm h-100">
+                        <div class="card-header bg-primary text-white">
+                            <h5 class="mb-0"><i class="fas fa-sliders-h"></i> General Settings</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="mb-3">
+                                <label class="form-label fw-bold">Language Preference</label>
+                                <select class="form-select" id="language-select">
+                                    <option value="en" selected>English</option>
+                                    <option value="kn">Kannada (ಕನ್ನಡ)</option>
+                                    <option value="hi">Hindi (हिंदी)</option>
+                                </select>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label fw-bold">Theme</label>
+                                <select class="form-select" id="theme-select">
+                                    <option value="light" selected>Light</option>
+                                    <option value="dark">Dark</option>
+                                    <option value="auto">Auto (System)</option>
+                                </select>
+                            </div>
+                            <div class="form-check mb-3">
+                                <input class="form-check-input" type="checkbox" id="notifications-check" checked>
+                                <label class="form-check-label" for="notifications-check">
+                                    Enable notifications
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="auto-blockchain-check">
+                                <label class="form-check-label" for="auto-blockchain-check">
+                                    Auto-store verifications on blockchain
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Verification Settings -->
+                <div class="col-lg-6 mb-4">
+                    <div class="card shadow-sm h-100">
+                        <div class="card-header bg-success text-white">
+                            <h5 class="mb-0"><i class="fas fa-check-circle"></i> Verification Settings</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="mb-3">
+                                <label class="form-label fw-bold">Risk Threshold</label>
+                                <select class="form-select" id="risk-threshold-select">
+                                    <option value="low">Low (0-40%)</option>
+                                    <option value="medium" selected>Medium (40-70%)</option>
+                                    <option value="high">High (70-100%)</option>
+                                </select>
+                                <small class="text-muted">Documents above this risk level will be flagged</small>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label fw-bold">OCR Engine</label>
+                                <select class="form-select" id="ocr-engine-select">
+                                    <option value="easyocr" selected>EasyOCR (Recommended)</option>
+                                    <option value="tesseract">Tesseract</option>
+                                    <option value="both">Both (Slower, More Accurate)</option>
+                                </select>
+                            </div>
+                            <div class="form-check mb-3">
+                                <input class="form-check-input" type="checkbox" id="auto-translate-check" checked>
+                                <label class="form-check-label" for="auto-translate-check">
+                                    Auto-translate Kannada documents
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="save-history-check" checked>
+                                <label class="form-check-label" for="save-history-check">
+                                    Save verification history locally
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- System Information -->
+                <div class="col-lg-6 mb-4">
+                    <div class="card shadow-sm h-100">
+                        <div class="card-header bg-info text-white">
+                            <h5 class="mb-0"><i class="fas fa-info-circle"></i> System Information</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="mb-3">
+                                <strong>Version:</strong> 
+                                <span class="badge bg-primary">v2.0.0</span>
+                            </div>
+                            <div class="mb-3">
+                                <strong>Backend Status:</strong> 
+                                <span class="badge bg-success" id="backend-status">Connected</span>
+                            </div>
+                            <div class="mb-3">
+                                <strong>Blockchain:</strong> 
+                                <span class="badge bg-warning text-dark">Mock (SQLite)</span>
+                            </div>
+                            <div class="mb-3">
+                                <strong>Database:</strong> 
+                                <span class="badge bg-secondary">SQLite</span>
+                            </div>
+                            <div class="mb-3">
+                                <strong>Total Verifications:</strong> 
+                                <span class="badge bg-primary" id="total-verifications">0</span>
+                            </div>
+                            <hr>
+                            <div class="d-grid gap-2">
+                                <button class="btn btn-outline-danger" onclick="clearAllData()">
+                                    <i class="fas fa-trash"></i> Clear All Local Data
+                                </button>
+                                <button class="btn btn-outline-secondary" onclick="exportData()">
+                                    <i class="fas fa-download"></i> Export Verification Data
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- About & Help -->
+                <div class="col-lg-6 mb-4">
+                    <div class="card shadow-sm h-100">
+                        <div class="card-header bg-secondary text-white">
+                            <h5 class="mb-0"><i class="fas fa-question-circle"></i> About & Help</h5>
+                        </div>
+                        <div class="card-body">
+                            <h6 class="fw-bold">PropTrust</h6>
+                            <p class="text-muted">AI-powered property document verification system</p>
+                            
+                            <h6 class="fw-bold mt-4">Features:</h6>
+                            <ul class="list-unstyled">
+                                <li><i class="fas fa-check text-success"></i> OCR for Kannada & English</li>
+                                <li><i class="fas fa-check text-success"></i> NER Entity Extraction</li>
+                                <li><i class="fas fa-check text-success"></i> Risk Assessment</li>
+                                <li><i class="fas fa-check text-success"></i> Blockchain Anchoring</li>
+                                <li><i class="fas fa-check text-success"></i> Tamper Detection</li>
+                            </ul>
+                            
+                            <hr>
+                            
+                            <div class="d-grid gap-2">
+                                <a href="/docs" target="_blank" class="btn btn-outline-primary">
+                                    <i class="fas fa-book"></i> API Documentation
+                                </a>
+                                <button class="btn btn-outline-info" onclick="showTutorial()">
+                                    <i class="fas fa-graduation-cap"></i> Quick Tutorial
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Save Settings Button -->
+            <div class="row mt-4">
+                <div class="col">
+                    <div class="card shadow-sm">
+                        <div class="card-body text-center">
+                            <button class="btn btn-primary btn-lg px-5" onclick="saveSettings()">
+                                <i class="fas fa-save"></i> Save All Settings
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-dark text-white text-center py-3 mt-auto">
+        <div class="container">
+            <p class="mb-1">
+                <i class="fas fa-shield-alt"></i> <strong>PropTrust v2.0</strong> - AI-Blockchain Property Verification System
+            </p>
+            <p class="small text-muted mb-0">Powered by AI, Secured by Blockchain</p>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    <script src="/js/main.js"></script>
+</body>
+</html>

@@ -67,28 +67,61 @@ class RiskEngine:
         entities = entities or {}
         classification = classification or {}
         
-        # Factor 1: Loan/Encumbrance present (30 points)
+        # Factor 1: Loan/Encumbrance present (25 points base)
         loan_present = entities.get('loan_present', False)
         banks = entities.get('banks', [])
         loan_indicators = entities.get('loan_indicators', [])
         loan_amounts = entities.get('loan_amounts', [])
         
-        # Check for loan presence from multiple sources
-        has_loan = loan_present or len(banks) > 0 or len(loan_amounts) > 0
+        # CRITICAL FIX: Context-based loan validation
+        # Only count valid loans (> ₹1,000 AND near bank keywords)
+        valid_loan_amounts = []
+        for amount in loan_amounts:
+            try:
+                # Clean amount string
+                amount_clean = str(amount).replace(',', '').replace('.', '').replace('-', '').replace('/', '').replace('₹', '').strip()
+                amount_num = float(amount_clean)
+                if amount_num >= 1000:  # Minimum threshold
+                    valid_loan_amounts.append(amount)
+            except:
+                pass
         
-        if has_loan:
-            risk_score += self.weights["loan_present"]
-            loan_desc = "Loan/Encumbrance detected"
-            if len(loan_amounts) > 0:
-                loan_desc += f" (Amount: {loan_amounts[0]})"
-            factors.append(f"{loan_desc} ({self.weights['loan_present']} points)")
+        # Check for loan presence from multiple validated sources
+        has_valid_loan = (loan_present and len(valid_loan_amounts) > 0) or (len(banks) > 0 and len(valid_loan_amounts) > 0)
+        
+        if has_valid_loan:
+            risk_score += 25  # Base loan risk
+            loan_desc = "Active loan detected"
+            if len(valid_loan_amounts) > 0:
+                # Show first valid amount only
+                loan_desc += f" (Amount: ₹{valid_loan_amounts[0]})"
+            if len(banks) > 0:
+                loan_desc += f" from {banks[0]}"
+            factors.append(f"{loan_desc} (25 points)")
             flags.append("LOAN_PRESENT")
             
-            # Additional penalty for multiple banks/loans
-            if len(banks) > 1 or len(loan_amounts) > 1:
-                risk_score += self.penalty_weights["multiple_loans"]
-                factors.append(f"Multiple loans detected ({self.penalty_weights['multiple_loans']} points)")
-                flags.append("MULTIPLE_LOANS")
+            # CRITICAL FIX: Only penalize for DISTINCT valid loans (not duplicates)
+            if len(valid_loan_amounts) > 1:
+                # Check if truly distinct (not similar amounts)
+                distinct_loans = []
+                for amt in valid_loan_amounts:
+                    is_duplicate = False
+                    try:
+                        amt_num = float(str(amt).replace(',', '').replace('.', '').replace('-', '').replace('/', '').replace('₹', '').strip())
+                        for existing in distinct_loans:
+                            # If within 10% similarity, consider duplicate
+                            if abs(amt_num - existing) / max(existing, 1) < 0.1:
+                                is_duplicate = True
+                                break
+                        if not is_duplicate:
+                            distinct_loans.append(amt_num)
+                    except:
+                        pass
+                
+                if len(distinct_loans) > 1:
+                    risk_score += 10  # Reduced penalty for multiple distinct loans
+                    factors.append(f"Multiple distinct loans detected (10 points)")
+                    flags.append("MULTIPLE_LOANS")
         
         # Factor 2: Legal case present (10 points)
         case_numbers = entities.get('case_numbers', [])
@@ -248,6 +281,12 @@ class RiskEngine:
             recommendations.append("⛔ IMMEDIATE HALT - Potential document forgery")
             recommendations.append("Report to authorities if fraud suspected")
             recommendations.append("Conduct forensic document verification")
+        
+        # Standard recommendations (always apply)
+        if level in ["Medium", "High"]:
+            recommendations.append("Verify seller's identity and ownership chain")
+            recommendations.append("Conduct site inspection")
+            recommendations.append("Obtain updated Encumbrance Certificate")
         
         # General recommendations
         recommendations.append("Verify seller's identity and ownership chain")
